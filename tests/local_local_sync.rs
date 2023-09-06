@@ -30,19 +30,28 @@ fn clear_files() -> Result<()> {
 }
 
 fn setup_files() -> Result<()> {
-    std::fs::create_dir_all("./temp/local_local_sync/local_a")?;
-    std::fs::create_dir_all("./temp/local_local_sync/local_b")?;
+    use std::{fs, time::Duration, thread::sleep};
+
+    fs::create_dir_all("./temp/local_local_sync/local_a")?;
+    fs::create_dir_all("./temp/local_local_sync/local_b")?;
 
     // local_b has an outdated file_b
-    std::fs::write("./temp/local_local_sync/local_b/file_b.txt", "file_b_old")?;
+    fs::write("./temp/local_local_sync/local_b/file_b.txt", "file_b_old")?;
+    sleep(Duration::from_secs(1));
 
     // local_a has up-to-date everything except file_a
-    std::fs::write("./temp/local_local_sync/local_a/file_a.txt", "file_a_old")?;
-    std::fs::write("./temp/local_local_sync/local_a/file_b.txt", "file_b_new")?;
-    std::fs::write("./temp/local_local_sync/local_a/file_c.txt", "file_c_new")?;
+    fs::write("./temp/local_local_sync/local_a/file_a.txt", "file_a_old")?;
+    sleep(Duration::from_secs(1));
+
+    fs::write("./temp/local_local_sync/local_a/file_b.txt", "file_b_new")?;
+    sleep(Duration::from_secs(1));
+
+    fs::write("./temp/local_local_sync/local_a/file_c.txt", "file_c_new")?;
+    sleep(Duration::from_secs(1));
 
     // local_b already has the updated file_a
-    std::fs::write("./temp/local_local_sync/local_b/file_a.txt", "file_a_new")?;
+    fs::write("./temp/local_local_sync/local_b/file_a.txt", "file_a_new")?;
+    sleep(Duration::from_secs(1));
 
     Ok(())
 }
