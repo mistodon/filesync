@@ -14,5 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
     - name: checks
       run: bash scripts/citest
+
+    - name: integration
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        TARGET_BUCKET: ${{ secrets.TARGET_BUCKET }}
+        TARGET_PREFIX: ${{ secrets.TARGET_PREFIX }}
+        COMMIT_HASH: ${{ github.event.workflow_run.head_sha }}
+      run: cargo test --features s3_integration_test -- --nocapture
