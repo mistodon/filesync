@@ -25,5 +25,5 @@ jobs:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         TARGET_BUCKET: ${{ secrets.TARGET_BUCKET }}
         TARGET_PREFIX: ${{ secrets.TARGET_PREFIX }}
-        COMMIT_HASH: ${{ github.event.workflow_run.head_sha }}
+        COMMIT_HASH: ${{ github.sha }}
       run: cargo test --features s3_integration_test -- --nocapture

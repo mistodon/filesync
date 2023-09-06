@@ -21,6 +21,8 @@ async fn run_test() -> Result<()> {
 
     let bucket = env!("TARGET_BUCKET");
     let commit = env!("COMMIT_HASH");
+    assert!(!commit.is_empty());
+    eprintln!("Commit hash is: {}", commit);
 
     let mut prefix = PathBuf::from(env!("TARGET_PREFIX"));
     prefix.push(commit);
