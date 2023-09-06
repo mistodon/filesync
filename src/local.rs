@@ -169,7 +169,7 @@ mod tests {
         if temp.exists() {
             std::fs::remove_dir_all(temp).unwrap();
         }
-        std::fs::create_dir(temp).unwrap();
+        std::fs::create_dir_all(temp).unwrap();
 
         // Create FileSource
         let mut fs = LocalFiles::new("./temp/local", false);
