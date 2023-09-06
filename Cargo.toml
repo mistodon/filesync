@@ -1,0 +1,28 @@
+[package]
+name = "filesync"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[features]
+default = ["s3"]
+s3 = ["aws-sdk-s3"]
+s3_integration_test = ["s3"]
+
+[dependencies]
+async-trait = "0.1"
+aws-sdk-s3 = { version = "0.29", optional = true }
+chrono = { version = "0.4", features = ["serde"] }
+filetime = "0.2"
+ignore = "0.4"
+md5 = "0.7"
+thiserror = "1"
+
+[dev-dependencies]
+aws-config = { version = "0.56" }
+aws-sdk-s3 = { version = "0.29" }
+pollster = "0.3"
+pretty_assertions = "1.4"
+tokio = { version = "1", features = ["full"] }

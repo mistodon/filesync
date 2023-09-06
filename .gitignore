@@ -1,0 +1,4 @@
+/target
+/Cargo.lock
+/temp
+.env_params
