@@ -30,7 +30,7 @@ fn clear_files() -> Result<()> {
 }
 
 fn setup_files() -> Result<()> {
-    use std::{fs, time::Duration, thread::sleep};
+    use std::{fs, thread::sleep, time::Duration};
 
     fs::create_dir_all("./temp/local_local_sync/local_a")?;
     fs::create_dir_all("./temp/local_local_sync/local_b")?;
