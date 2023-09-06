@@ -1,19 +1,26 @@
-Test structure:
+# filesync
 
-sync    ./temp/*
-to      s3://.../(commit-hash)/*
+Simple Rust library to sync files between different sources.
 
-1. Sync to S3 (uploads all files)
-2. Delete some local files
-3. Sync S3 to local (verify only the subset is downloaded)
-4. Modify some local files
-5. Sync to S3 again (verify only the subset is uploaded)
+Currently supports:
 
-File structure:
+1. Local files
+2. S3 (`s3` feature)
 
-/
-    one_no_changes.txt
-    two_changes.txt
-    folder/
-        three_no_changes.txt
-        four_changes.txt
+## Usage
+
+```rust
+use filesync::{
+    local::LocalFiles,
+    s3::S3Files,
+};
+
+let config = aws_config::load_from_env().await;
+let client = aws_sdk_s3::Client::new(&config);
+
+let mut local = LocalFiles::new("./my_local_files", true);
+let mut s3 = S3Files::new(client, "my_s3_bucket", "path/in/bucket", true);
+
+let synced_paths = filesync::sync_one_way(&mut local, &mut s3).await?;
+assert_eq!(synced_paths, vec![PathBuf::from("my_changed_file.txt")]);
+```
