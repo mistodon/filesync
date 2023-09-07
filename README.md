@@ -1,4 +1,11 @@
-# filesync
+# filesync <br/> [![build_badge]][build_url] [![docs_badge]][docs_url] [![crates_badge]][crates_url]
+
+[build_badge]: https://github.com/mistodon/filesync/actions/workflows/rust.yml/badge.svg
+[build_url]: https://github.com/mistodon/filesync
+[docs_badge]: https://docs.rs/edres/badge.svg
+[docs_url]: https://docs.rs/filesync/latest/filesync/
+[crates_badge]: https://img.shields.io/crates/v/filesync.svg
+[crates_url]: https://crates.io/crates/filesync
 
 Simple Rust library to sync files between different sources.
 
