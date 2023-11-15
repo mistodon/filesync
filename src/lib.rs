@@ -50,11 +50,11 @@ pub enum SyncError {
     ErrorComparing { errors: Vec<SyncError> },
 
     #[error(transparent)]
-    FileSourceError(#[from] Box<dyn std::error::Error>),
+    FileSourceError(#[from] Box<dyn std::error::Error + Send>),
 }
 
 impl SyncError {
-    fn boxed<E: std::error::Error + 'static>(error: E) -> Self {
+    fn boxed<E: std::error::Error + Send + 'static>(error: E) -> Self {
         SyncError::FileSourceError(Box::new(error))
     }
 }
@@ -129,7 +129,7 @@ impl FileEntry {
 /// otherwise unsupported data storage.
 #[async_trait]
 pub trait FileSource {
-    type Error: std::error::Error + 'static;
+    type Error: std::error::Error + Send + 'static;
 
     /// Recursively list all files in the source.
     async fn list_files(&mut self) -> StdResult<Vec<FileEntry>, Self::Error>;

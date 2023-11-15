@@ -111,6 +111,30 @@ fn sync_nothing_to_nothing() {
 }
 
 #[test]
+fn sync_process_can_be_spawned() {
+    async fn spawn_fn() {
+        tokio::spawn(test_fn());
+    }
+
+    async fn test_fn() {
+        let clock = Arc::new(AtomicU64::new(0));
+
+        let mut from = TestSource::new(Some(Arc::clone(&clock)), false);
+        let mut to = TestSource::new(Some(Arc::clone(&clock)), false);
+
+        crate::sync_one_way(&mut from, &mut to).await.unwrap();
+
+        assert_eq!(&from.files, &[]);
+        assert_eq!(&to.files, &[]);
+    }
+
+    use tokio::runtime::Runtime;
+
+    let rt = Runtime::new().unwrap();
+    rt.block_on(spawn_fn());
+}
+
+#[test]
 fn sync_file_to_nothing() {
     let clock = Arc::new(AtomicU64::new(0));
 
