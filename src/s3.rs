@@ -60,6 +60,8 @@ impl FileSource for S3Files {
     type Error = S3Error;
 
     async fn list_files(&mut self) -> Result<Vec<FileEntry>, Self::Error> {
+        let empty_path: PathBuf = PathBuf::new();
+
         let response = self
             .client
             .list_objects_v2()
@@ -82,27 +84,32 @@ impl FileSource for S3Files {
                     .map_err(|_| S3Error::ObjectWrongPrefix)?
                     .to_owned();
 
-                let modified = object.last_modified.and_then(|date_time| {
-                    NaiveDateTime::from_timestamp_opt(date_time.secs(), date_time.subsec_nanos())
+                if key != empty_path {
+                    let modified = object.last_modified.and_then(|date_time| {
+                        NaiveDateTime::from_timestamp_opt(
+                            date_time.secs(),
+                            date_time.subsec_nanos(),
+                        )
                         .map(|x| x.and_utc())
-                });
+                    });
 
-                let md5_hash = match self.use_etag_as_hash {
-                    true => object.e_tag.and_then(|etag| {
-                        let digest: Option<u128> =
-                            u128::from_str_radix(etag.trim_matches('"'), 16).ok();
+                    let md5_hash = match self.use_etag_as_hash {
+                        true => object.e_tag.and_then(|etag| {
+                            let digest: Option<u128> =
+                                u128::from_str_radix(etag.trim_matches('"'), 16).ok();
 
-                        digest
-                    }),
-                    false => None,
-                };
+                            digest
+                        }),
+                        false => None,
+                    };
 
-                files.push(FileEntry {
-                    path: key,
-                    size: u64::try_from(object.size).ok(),
-                    modified,
-                    md5_hash,
-                });
+                    files.push(FileEntry {
+                        path: key,
+                        size: u64::try_from(object.size).ok(),
+                        modified,
+                        md5_hash,
+                    });
+                }
             }
         }
 
