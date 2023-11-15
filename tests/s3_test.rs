@@ -35,6 +35,8 @@ async fn run_test() -> Result<()> {
 
     eprintln!("1. Syncing initial files to S3");
     let mut synced_paths = filesync::sync_one_way(&mut local, &mut s3).await?;
+    std::thread::sleep(std::time::Duration::from_secs(2));
+
     synced_paths.sort();
     assert_eq!(
         dbg!(synced_paths),
@@ -52,6 +54,8 @@ async fn run_test() -> Result<()> {
 
     eprintln!("3. Restoring files from S3");
     let mut synced_paths = filesync::sync_one_way(&mut s3, &mut local).await?;
+    std::thread::sleep(std::time::Duration::from_secs(2));
+
     synced_paths.sort();
     assert_eq!(
         dbg!(synced_paths),
@@ -68,6 +72,8 @@ async fn run_test() -> Result<()> {
 
     eprintln!("5. Syncing changes to S3");
     let mut synced_paths = filesync::sync_one_way(&mut local, &mut s3).await?;
+    std::thread::sleep(std::time::Duration::from_secs(2));
+
     synced_paths.sort();
     assert_eq!(
         dbg!(synced_paths),
