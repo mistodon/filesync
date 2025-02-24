@@ -117,7 +117,7 @@ impl FileEntry {
             (None, None, None) => {
                 return Err(SyncError::NoMetadata {
                     filename: self.path.clone(),
-                })
+                });
             }
         })
     }

@@ -1,8 +1,8 @@
 [package]
 name = "filesync"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Vi <violet@hey.com>"]
-edition = "2021"
+edition = "2024"
 description = "Sync files between different sources"
 homepage = "https://github.com/mistodon/filesync"
 repository = "https://github.com/mistodon/filesync"
